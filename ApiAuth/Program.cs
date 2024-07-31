@@ -5,6 +5,7 @@ using ApiAuth.Infrastructure;
 using ApiAuth.Middleware;
 using ApiAuth.OptionsSetup;
 using ApiAuth.Persistence;
+using Carter;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +17,7 @@ var builderEnvironment = new ConfigurationBuilder()
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddCarter();
 
 
 builder.Services.AddSwaggerExtension();
@@ -28,6 +30,7 @@ builder.Services.AddInfrastructure();
 
 builder.Services.AddProblemDetails();
 
+builder.Services.ConfigureOptions<AuthOptionsSetup>();
 
 var app = builder.Build();
 
@@ -41,6 +44,7 @@ app.UseHttpsRedirection();
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
+app.MapCarter();
 
 app.UseExceptionHandler();
 
