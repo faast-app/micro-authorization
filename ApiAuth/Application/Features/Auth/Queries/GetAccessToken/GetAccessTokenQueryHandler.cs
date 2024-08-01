@@ -156,7 +156,7 @@ internal sealed class GetAccessTokenQueryHandler: IQueryHandler<GetAccessTokenQu
 
         var claims = new[]
         {
-            new Claim(ClaimTypes.NameIdentifier, clientId)
+            new Claim(JwtRegisteredClaimNames.Sub, clientId)
         };
         
         var token = new JwtSecurityToken

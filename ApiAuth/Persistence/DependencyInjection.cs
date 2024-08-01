@@ -13,22 +13,7 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddPersistence(this IServiceCollection services)
     {
-        services.ConfigureOptions<FintecDbOptionsSetup>();
         services.ConfigureOptions<IntegracionDbOptionsSetup>();
-
-        services.AddDbContext<FintecDbContext>(
-            (serviceProvider, dbContenxtOptionsBuilder) =>
-            {
-                var databaseOptions = serviceProvider.GetService<IOptions<FintecDbOptions>>()!.Value;
-                dbContenxtOptionsBuilder.UseMySql(databaseOptions.ConnectionString, ServerVersion.AutoDetect(databaseOptions.ConnectionString), mySqlOptionsAction =>
-                {
-                    mySqlOptionsAction.EnableRetryOnFailure(3);
-                    mySqlOptionsAction.CommandTimeout(30);
-                });
-
-                dbContenxtOptionsBuilder.EnableDetailedErrors(true);
-                dbContenxtOptionsBuilder.EnableSensitiveDataLogging(true);
-            });
 
         services.AddDbContext<IntegracionDbContext>(
             (serviceProvider, dbContenxtOptionsBuilder) =>
@@ -43,14 +28,6 @@ public static class DependencyInjection
                 dbContenxtOptionsBuilder.EnableDetailedErrors(true);
                 dbContenxtOptionsBuilder.EnableSensitiveDataLogging(true);
             });
-
-        services.AddScoped<IFintecDbContext>(sp =>
-            sp.GetRequiredService<FintecDbContext>()
-        );
-
-        services.AddScoped<IUnitOfWork>(sp =>
-            sp.GetRequiredService<FintecDbContext>()
-        );
 
         services.AddScoped<IIntegracionDbContext>(sp =>
             sp.GetRequiredService<IntegracionDbContext>()
