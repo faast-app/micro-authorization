@@ -1,0 +1,64 @@
+image: mcr.microsoft.com/dotnet/sdk:7.0
+
+definitions:
+  steps:
+    - step: &CI
+        name: Build and Test
+        caches:
+          - dotnetcore
+        script:
+          - cd ApiAuth
+          - dotnet restore
+          - dotnet publish -c Release -o bin
+          - mkdir packaged
+          - tar -czvf packaged/package.tar.gz -C bin .
+          - cp -r packaged /opt/atlassian/pipelines/agent/build/
+          - ls /opt/atlassian/pipelines/agent/build/
+        artifacts: 
+         - packaged/**
+    - step: &Check-Version-Encoding
+        name: Verificando versionamiento
+        image: python:3.7.2
+        caches:
+          - dotnetcore
+        script:
+          - apt-get update && apt-get install -y python-chardet
+          - export ENCODING=$(chardet version.txt)
+          - if [[ $ENCODING == *UTF-8-SIG* ]]; then echo "Error UTF-8 en version.txt";exit 1; fi
+    - step: &CDelivery
+        name: Publicacion en cliente
+        trigger: manual
+        image: alpine
+        deployment: production
+        caches:
+          - dotnetcore
+        script:
+          - apk update && apk add git && apk add openssh-client
+          - rm -rf production && mkdir -p upload
+          - tar -xf packaged/package.tar.gz -C upload
+          - git config --global user.email "$EMAIL"
+          - git config --global user.name "$NAME"
+          - cd upload
+          - git init
+          - git remote add origin $URL_REPOSITORY_DEPLOY
+          - git add .
+          - export VERSION_REPO_CLIENTE=$(cat ../version.txt)
+          - export EXISTE=$(git ls-remote --heads origin ${VERSION_REPO_CLIENTE} | awk '{print $1}')
+          - echo $EXISTE
+          - if [ $EXISTE ]; then echo "Esta version ya existe, revisar versionamiento";exit 1; fi
+          - git commit -m "Solicitando Pase ${VERSION_REPO_CLIENTE}"
+          - echo $VERSION_REPO_CLIENTE
+          - git checkout -b $VERSION_REPO_CLIENTE
+          - git push origin $VERSION_REPO_CLIENTE
+  caches:
+    sonar: ~/.sonar
+
+pipelines:
+  pull-requests:
+    '{feature/factoring/*,hotfix/factoring/*}':
+    - step: *CI
+  branches:
+    '{faast/*,orsan/*,finmediato/*,finfast/*,blanco/*,progreso/*,develop,main}':
+    - step: *CI
+    - step: *Check-Version-Encoding
+    - step: *CDelivery
