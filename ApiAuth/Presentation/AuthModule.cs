@@ -32,7 +32,7 @@ public class AuthModule : CarterModule
                     return Results.BadRequest(result.Error);
                 }
 
-                return Results.Ok(result.Value);
+                return Results.Ok(result);
 
             });
     }
