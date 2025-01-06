@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>1528e5a1-002d-4c7d-9686-44152ba66b62</UserSecretsId>
@@ -15,18 +15,17 @@
 </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Carter" Version="7.2.0" />
+    <PackageReference Include="Carter" Version="6.1.1" />
     <PackageReference Include="Mapster" Version="7.4.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.20" />
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.14" />
+	<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.36" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.5" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
 	<PackageReference Include="FluentValidation" Version="11.8.1" />
 	<PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.8.1" />
 	<PackageReference Include="MediatR" Version="11.0.0" />
 	<PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
-	<PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.14" />
-	<PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="7.0.0" />
+	<PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.36" />
+	<PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="6.0.3" />
 	<PackageReference Include="Scrutor" Version="4.2.2" />
   </ItemGroup>
 

@@ -1,23 +1,22 @@
-﻿using ApiAuth.Application.Features.Auth.Queries.GetAccessToken;
+﻿using ApiAuth.Application.Features.Cavali.Integration.Queries.GetAccessToken;
 using Carter;
 using MediatR;
 
 namespace ApiAuth.Presentation;
 
-public class AuthModule : ICarterModule
+public class IntegrationCavaliModule : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
         app.MapPost(
-            "api/v1/auth/token",
+            "api/v1/integration/cavali/token",
             async (
-                GetAccessTokenQuery request,
+                GetTokenCavaliQuery request,
                 CancellationToken cancellationToken,
                 ISender sender
                 ) =>
             {
-                var requestSend = new GetAccessTokenQuery(request.ClientId, request.GrantType, request.ClientAssertionType, request.ClientAssertion, request.UserName, request.Password);
-                //var requestSend = new GetAccessTokenQuery(ClientId, GrantType, ClientAssertionType, ClientAssertion, UserName, Password);
+                var requestSend = new GetTokenCavaliQuery(request.ClientId, request.GrantType, request.ClientAssertionType, request.UserName, request.Password);
                 var result = await sender.Send(requestSend, cancellationToken);
                 
                 if (!result.IsSuccess)
@@ -28,5 +27,6 @@ public class AuthModule : ICarterModule
                 return Results.Ok(result);
 
             });
+
     }
 }
