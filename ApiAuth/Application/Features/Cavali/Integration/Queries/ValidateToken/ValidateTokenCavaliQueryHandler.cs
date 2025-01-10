@@ -26,8 +26,6 @@ internal sealed class ValidateTokenCavaliQueryHandler: IQueryHandler<ValidateTok
         CancellationToken cancellationToken
     )
     {
-        string token = request.AccessToken;
-
         // Configurar los parámetros de validación
         var parameters = new TokenValidationParameters
         {
@@ -41,23 +39,7 @@ internal sealed class ValidateTokenCavaliQueryHandler: IQueryHandler<ValidateTok
             ClockSkew = TimeSpan.Zero // Evita la tolerancia en el tiempo de expiración
         };
 
-        try
-        {
-            var jwtSecurityToken = new JwtSecurityTokenHandler().ValidateToken(token, parameters, out SecurityToken securityToken);
-
-            // var jwtToken = securityToken;
-            // var tokenHandler = new JwtSecurityTokenHandler();
-            // var jwtSecurityToken = tokenHandler.ReadJwtToken(jwtToken);
-
-            return Result.Success(new ValidateTokenCavaliQueryResponse(true));
-        }
-        catch (SecurityTokenException ex)
-        {
-            Console.WriteLine("El token no es válido: " + ex.Message);
-            return Result.Failure<ValidateTokenCavaliQueryResponse>(new Error(
-                StatusCodes.Status400BadRequest.ToString(),
-                "Token inválido"
-                ));
-        }
+        var tokenValidationResult = await new JwtSecurityTokenHandler().ValidateTokenAsync(request.AccessToken, parameters);
+        return Result.Success(new ValidateTokenCavaliQueryResponse(tokenValidationResult.IsValid));
     }
 }
