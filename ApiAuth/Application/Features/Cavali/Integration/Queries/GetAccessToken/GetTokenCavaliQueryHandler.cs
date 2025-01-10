@@ -1,7 +1,7 @@
 using ApiAuth.Application.Abstractions.Messaging;
+using ApiAuth.Common;
 using ApiAuth.Domain.Repositories;
 using ApiAuth.Domain.Shared;
-using ApiAuth.Infrastructure.Authentication;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -12,15 +12,15 @@ namespace ApiAuth.Application.Features.Cavali.Integration.Queries.GetAccessToken
 
 internal sealed class GetTokenCavaliQueryHandler: IQueryHandler<GetTokenCavaliQuery, GetTokenCavaliQueryResponse>
 {
-    private readonly AuthOptions _options;
+    private readonly AppSettings _appSettings;
     private readonly IAuthRepository _authRepository;
     public GetTokenCavaliQueryHandler
     (
-        IOptions<AuthOptions> options,
+        IOptions<AppSettings> appSettings,
         IAuthRepository authRepository
     )
     {
-        _options = options.Value;
+        _appSettings = appSettings.Value;
         _authRepository = authRepository;
     }
 
@@ -53,7 +53,7 @@ internal sealed class GetTokenCavaliQueryHandler: IQueryHandler<GetTokenCavaliQu
 
     private string GenerateAccessToken(string clientId)
     {
-        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.SecretKey));
+        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appSettings.Integration.Cavali.SecretKey));
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
         var claims = new[]
@@ -63,8 +63,8 @@ internal sealed class GetTokenCavaliQueryHandler: IQueryHandler<GetTokenCavaliQu
         
         var token = new JwtSecurityToken
         (
-            "API_AUTH",
-            "CAVALI",
+            Constants.Integration.Cavali.Issuer,
+            Constants.Integration.Cavali.Audience,
             claims,
             expires: DateTime.UtcNow.AddMinutes(20),
             signingCredentials: credentials
