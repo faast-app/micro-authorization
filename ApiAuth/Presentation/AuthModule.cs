@@ -1,22 +1,15 @@
 ﻿using ApiAuth.Application.Features.Auth.Queries.GetAccessToken;
 using Carter;
 using MediatR;
-using Microsoft.AspNetCore.Mvc;
 
 namespace ApiAuth.Presentation;
 
-public class AuthModule : CarterModule
+public class AuthModule : ICarterModule
 {
-    public AuthModule()
-        : base("/api/v1/auth")
-    {
-
-    }
-
-    public override void AddRoutes(IEndpointRouteBuilder app)
+    public void AddRoutes(IEndpointRouteBuilder app)
     {
         app.MapPost(
-            "token",
+            "api/v1/auth/token",
             async (
                 GetAccessTokenQuery request,
                 CancellationToken cancellationToken,

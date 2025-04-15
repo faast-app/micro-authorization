@@ -58,7 +58,7 @@ pipelines:
     '{feature/factoring/*,hotfix/factoring/*}':
     - step: *CI
   branches:
-    '{faast/*,orsan/*,finmediato/*,finfast/*,blanco/*,progreso/*,develop,main}':
+    '{faast/*,orsan/*,finmediato/*,finfast/*,blanco/*,progreso/*,develop,main,total/*}':
     - step: *CI
     - step: *Check-Version-Encoding
     - step: *CDelivery
