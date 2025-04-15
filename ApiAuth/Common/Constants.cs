@@ -7,5 +7,10 @@ public static class Constants
             public static string Issuer = "API_AUTH";
             public static string Audience = "API_CAVALI";
         }
+        public static class PortalDigital
+        {
+            public static string Issuer = "API_AUTH";
+            public static string Audience = "API_PORTAL_DIGITAL";
+        }
     }
 }
