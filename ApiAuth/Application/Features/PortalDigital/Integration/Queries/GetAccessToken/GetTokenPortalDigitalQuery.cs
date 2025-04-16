@@ -8,5 +8,8 @@ public record GetTokenPortalDigitalQuery
     string GrantType,
     string ClientAssertionType,
     string UserName,
-    string Password
+    string Password,
+    string NroDoctoCliente,
+    string NombreCliente,
+    string TipoOferta
 ) : IQuery<GetTokenPortalDigitalQueryResponse>;

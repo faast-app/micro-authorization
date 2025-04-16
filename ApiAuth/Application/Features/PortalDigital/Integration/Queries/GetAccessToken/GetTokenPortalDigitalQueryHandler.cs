@@ -46,18 +46,21 @@ internal sealed class GetTokenPortalDigitalQueryHandler: IQueryHandler<GetTokenP
                 ));
         }
 
-        var result = new GetTokenPortalDigitalQueryResponse(GenerateAccessToken(request.ClientId), "Bearer", 299);
+        var result = new GetTokenPortalDigitalQueryResponse(GenerateAccessToken(request.ClientId, request.NroDoctoCliente, request.NombreCliente, request.TipoOferta), "Bearer", 299);
         return Result.Success(result);
     }
 
-    private string GenerateAccessToken(string clientId)
+    private string GenerateAccessToken(string clientId, string nroDoctoCliente, string nombreCliente, string tipoOferta)
     {
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appSettings.Integration.PortalDigital.SecretKey));
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
         var claims = new[]
         {
-            new Claim(JwtRegisteredClaimNames.Sub, clientId)
+            new Claim(JwtRegisteredClaimNames.Sub, clientId),
+            new Claim("nroDoctoConsulta", nroDoctoCliente),
+            new Claim("nombreCliente", nombreCliente),
+            new Claim("tipoOferta", tipoOferta)
         };
         
         var token = new JwtSecurityToken
