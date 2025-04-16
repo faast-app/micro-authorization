@@ -17,7 +17,7 @@ public class IntegrationPortalDigitalModule : ICarterModule
                 ISender sender
                 ) =>
             {
-                var requestSend = new GetTokenPortalDigitalQuery(request.ClientId, request.GrantType, request.ClientAssertionType, request.UserName, request.Password);
+                var requestSend = new GetTokenPortalDigitalQuery(request.ClientId, request.GrantType, request.ClientAssertionType, request.UserName, request.Password, request.NroDoctoCliente, request.NombreCliente, request.TipoOferta);
                 var result = await sender.Send(requestSend, cancellationToken);
                 
                 if (!result.IsSuccess)
