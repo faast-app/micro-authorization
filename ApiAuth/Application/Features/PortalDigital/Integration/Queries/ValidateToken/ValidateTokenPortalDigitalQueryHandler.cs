@@ -26,7 +26,35 @@ internal sealed class ValidateTokenPortalDigitalQueryHandler: IQueryHandler<Vali
         CancellationToken cancellationToken
     )
     {
-        // Configurar los parámetros de validación
+        var secretKey = _appSettings.Integration.PortalDigital.SecretKey;
+        var jwtToken = request.AccessToken;
+
+        var (isValid, tokenValidationResult, message) = await ValidateJwt(jwtToken, secretKey);
+        if (!isValid) {
+            return Result.Failure<ValidateTokenPortalDigitalQueryResponse>(new Error(
+                StatusCodes.Status400BadRequest.ToString(),
+                message
+                ));
+        }
+
+        var numeroDocumentoCliente = string.Empty;
+        var nombreCliente = string.Empty;
+        var tipoOferta = string.Empty;
+        if (tokenValidationResult != null) {
+            var claims = tokenValidationResult?.Claims.ToDictionary(c => c.Key, c => c.Value);
+            numeroDocumentoCliente = claims != null && claims.ContainsKey("nroDoctoConsulta") ? claims["nroDoctoConsulta"].ToString() : string.Empty;
+            nombreCliente = claims != null && claims.ContainsKey("nombreCliente") ? claims["nombreCliente"].ToString() : string.Empty;
+            tipoOferta = claims != null && claims.ContainsKey("tipoOferta") ? claims["tipoOferta"].ToString() : string.Empty;
+        }
+        return Result.Success(new ValidateTokenPortalDigitalQueryResponse(true, numeroDocumentoCliente ?? "", nombreCliente ?? "", tipoOferta ?? ""));
+    }
+
+    private async Task<(bool isValid, TokenValidationResult? tokenValidationResult, string message)> ValidateJwt(string jwtToken, string secretKey)
+    {
+        var tokenHandler = new JwtSecurityTokenHandler();
+        if (!tokenHandler.CanReadToken(jwtToken))
+            return (false, null, "El token JWT no tiene un formato válido.");
+        
         var parameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
@@ -35,11 +63,10 @@ internal sealed class ValidateTokenPortalDigitalQueryHandler: IQueryHandler<Vali
             ValidateIssuerSigningKey = true,
             ValidIssuer = Constants.Integration.PortalDigital.Issuer,
             ValidAudience = Constants.Integration.PortalDigital.Audience,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appSettings.Integration.PortalDigital.SecretKey)),
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey)),
             ClockSkew = TimeSpan.Zero // Evita la tolerancia en el tiempo de expiración
         };
-
-        var tokenValidationResult = await new JwtSecurityTokenHandler().ValidateTokenAsync(request.AccessToken, parameters);
-        return Result.Success(new ValidateTokenPortalDigitalQueryResponse(tokenValidationResult.IsValid));
+        var tokenValidationResult = await new JwtSecurityTokenHandler().ValidateTokenAsync(jwtToken, parameters);
+        return (tokenValidationResult.IsValid, tokenValidationResult, string.Empty);
     }
 }
