@@ -32,9 +32,9 @@ internal sealed class ValidateTokenSecurityQueryHandler: IQueryHandler<ValidateT
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            ValidIssuer = Constants.Integration.Cavali.Issuer,
-            ValidAudience = Constants.Integration.Cavali.Audience,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appSettings.Integration.Cavali.SecretKey)),
+            ValidIssuer = Constants.Integration.Security.Issuer,
+            ValidAudience = Constants.Integration.Security.Audience,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appSettings.Integration.Security.SecretKey)),
             ClockSkew = TimeSpan.Zero // Evita la tolerancia en el tiempo de expiración
         };
 
