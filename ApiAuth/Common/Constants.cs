@@ -12,5 +12,15 @@ public static class Constants
             public static string Issuer = "API_AUTH";
             public static string Audience = "API_PORTAL_DIGITAL";
         }
+        public static class Webhook
+        {
+            public static string Issuer = "API_AUTH";
+            public static string Audience = "API_WEBHOOK";
+        }
+        public static class Security
+        {
+            public static string Issuer = "API_AUTH";
+            public static string Audience = "API_SECURITY";
+        }
     }
 }
