@@ -8,9 +8,14 @@ public class AppSettings
 public class Integration
 {
     public Cavali Cavali { get; set; } = new Cavali();
+    public Webhook Webhook { get; set; } = new Webhook();
 }
 
 public class Cavali
+{
+    public string SecretKey { get; set; } = string.Empty;
+}
+public class Webhook
 {
     public string SecretKey { get; set; } = string.Empty;
 }

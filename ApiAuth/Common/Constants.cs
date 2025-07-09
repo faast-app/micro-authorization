@@ -7,5 +7,10 @@ public static class Constants
             public static string Issuer = "API_AUTH";
             public static string Audience = "API_CAVALI";
         }
+        public static class Webhook
+        {
+            public static string Issuer = "API_AUTH";
+            public static string Audience = "API_WEBHOOK";
+        }
     }
 }
