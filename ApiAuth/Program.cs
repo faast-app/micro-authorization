@@ -28,7 +28,7 @@ builder.Services.AddApplication();
 builder.Services.AddPersistence();
 builder.Services.AddInfrastructure();
 
-builder.Services.AddProblemDetails();
+//builder.Services.AddProblemDetails();
 
 builder.Services.ConfigureOptions<AuthOptionsSetup>();
 
@@ -46,7 +46,7 @@ app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.MapCarter();
 
-app.UseExceptionHandler();
+//app.UseExceptionHandler();
 
 app.MapGet("/", async (context) =>
 {
