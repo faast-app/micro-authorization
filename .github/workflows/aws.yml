@@ -33,10 +33,7 @@ jobs:
       with:
         host: 172.20.4.202
         username: ec2-user
-        key: |
-          -----BEGIN RSA PRIVATE KEY-----
-          AAABAAugv1b+AkOMp1p1uEfoXFqJIA2zv57p3azpDqrwAeqmHkF2v0Q7IqwkOBpiQdTGX3pGXrQGmWss1y3YwJ5rJsh8qrqnw9hwHuW+ZfZZR2QdwD+DbrM+WJpQsbkLWzxecZZSRElzhXfNbo0Nte4isKz8bQ5aqzUzGeGH+151oYhObGNXb75RKUzwonjrnS0gj64knamnEMUh9z3oN75kIDVkE4mNUAiXQj0nA52K4N37BzLqcPmfckqoFZ5tADFqXEI3E2C9GmT3x2uGAdFCi7pII+hZe3FU6Yawv+7tXfKgFZ10W7elmcCGyWUovxSZq29DumSTWArOjDTWog0ooAEAAACBANbHtbat5FEWNCwdF7jhgHy9A5irn0LobKRG90pVwdQu9W8Az/pTaUVlti6/iBSxP+32IR5e2OKsoyg7C7SupsJKnDYK8/arc2q6d2uI140Poqc/bMejan5dTwCg0TwHtuzbfJ9/MHesuD3v3YbwM8d34kqJ8kgF1pCbH5fWpFOBAAAAgQC1XzjdRz0ItaaImfRrn4SwyrgDwtLXnA8b0enTWm7o/Zz1T1/Jv/XO/1fj4vAtphFfmT3IAQoc53ZXBn7wnaneOyrDSyfafuWRnqnNJktSkLSNgsqOJtVV3Ix3KWsBgLRIJfO68587je3sb2ZnZMI4IBPGZRb7k6TLALNC3Ae9DQAAAIAqdGV/B7xD2G+trxRMGSbJHBuTKRCMOwnmXgI3UgzRgm34+GfRRqxwAU0fui0UAFtQYox2p6Hvu8r63SiTY9h/xKBJpwaRExEsZq1zHF7jEw6bycbBVPIo8r4bP+N3qYLiN0PavqIn13RX/wYvwfjcMSjzpT3dN5e8gbNnZR5c9w==
-          -----END RSA PRIVATE KEY-----
+        key: ${{ secrets.EC2_SSH_KEY }}
         source: ./publish/
         target: /home/ec2-user/faast-desa/apiauth/prod2
 
@@ -45,9 +42,6 @@ jobs:
       with:
         host: 172.20.4.202
         username: ec2-user
-        key: |
-          -----BEGIN RSA PRIVATE KEY-----
-          AAABAAugv1b+AkOMp1p1uEfoXFqJIA2zv57p3azpDqrwAeqmHkF2v0Q7IqwkOBpiQdTGX3pGXrQGmWss1y3YwJ5rJsh8qrqnw9hwHuW+ZfZZR2QdwD+DbrM+WJpQsbkLWzxecZZSRElzhXfNbo0Nte4isKz8bQ5aqzUzGeGH+151oYhObGNXb75RKUzwonjrnS0gj64knamnEMUh9z3oN75kIDVkE4mNUAiXQj0nA52K4N37BzLqcPmfckqoFZ5tADFqXEI3E2C9GmT3x2uGAdFCi7pII+hZe3FU6Yawv+7tXfKgFZ10W7elmcCGyWUovxSZq29DumSTWArOjDTWog0ooAEAAACBANbHtbat5FEWNCwdF7jhgHy9A5irn0LobKRG90pVwdQu9W8Az/pTaUVlti6/iBSxP+32IR5e2OKsoyg7C7SupsJKnDYK8/arc2q6d2uI140Poqc/bMejan5dTwCg0TwHtuzbfJ9/MHesuD3v3YbwM8d34kqJ8kgF1pCbH5fWpFOBAAAAgQC1XzjdRz0ItaaImfRrn4SwyrgDwtLXnA8b0enTWm7o/Zz1T1/Jv/XO/1fj4vAtphFfmT3IAQoc53ZXBn7wnaneOyrDSyfafuWRnqnNJktSkLSNgsqOJtVV3Ix3KWsBgLRIJfO68587je3sb2ZnZMI4IBPGZRb7k6TLALNC3Ae9DQAAAIAqdGV/B7xD2G+trxRMGSbJHBuTKRCMOwnmXgI3UgzRgm34+GfRRqxwAU0fui0UAFtQYox2p6Hvu8r63SiTY9h/xKBJpwaRExEsZq1zHF7jEw6bycbBVPIo8r4bP+N3qYLiN0PavqIn13RX/wYvwfjcMSjzpT3dN5e8gbNnZR5c9w==
-          -----END RSA PRIVATE KEY-----
+        key: ${{ secrets.EC2_SSH_KEY }}
         script: |
           sudo systemctl restart DESA-ApiAuth
