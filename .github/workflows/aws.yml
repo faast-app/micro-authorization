@@ -3,7 +3,8 @@ name: Deploy to EC2
 on:
   push:
     branches:
-      - faast/desa
+      - develop
+  workflow_dispatch:
 
 jobs:
   build-and-deploy:
