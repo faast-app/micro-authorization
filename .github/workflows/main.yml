@@ -57,7 +57,7 @@ jobs:
 
       - name: Check version.txt encoding
         run: |
-          ENCODING=$(python -m chardet version.txt | grep -o 'UTF-8')
+          ENCODING=$(python -m chardet version.txt | grep -o 'UTF-8-SIG')
           if [ "$ENCODING" = "UTF-8-SIG" ]; then
             echo "Error UTF-8-SIG en version.txt"
             exit 1
