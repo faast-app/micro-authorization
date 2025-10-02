@@ -1,0 +1,108 @@
+name: Build, Test, and Publish
+
+on:
+  push:
+    branches:
+      - faast/stage
+      - faast/preProd
+      - progreso/prePrdAws
+      - total/prod
+	    - develop
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '7.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore ApiAuth/ApiAuth.csproj
+
+      - name: Publish
+        run: dotnet publish ApiAuth/ApiAuth.csproj -c Release -o bin
+
+      - name: Package build output
+        run: |
+          mkdir -p packaged
+          tar -czvf packaged/package.tar.gz -C bin .
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: packaged
+          path: packaged/package.tar.gz
+
+  check-version-encoding:
+    runs-on: ubuntu-latest
+    needs: build-and-test
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install chardet
+        run: pip install chardet
+
+      - name: Check version.txt encoding
+        run: |
+          ENCODING=$(python -m chardet version.txt | grep -o 'UTF-8-SIG')
+          if [ "$ENCODING" = "UTF-8-SIG" ]; then
+            echo "Error UTF-8 en version.txt"
+            exit 1
+          fi
+
+  publish-client:
+    runs-on: ubuntu-latest
+    needs: [build-and-test, check-version-encoding]
+    if: github.event_name == 'workflow_dispatch'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download packaged artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: packaged
+          path: packaged
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y git
+
+      - name: Unpack artifact
+        run: |
+          rm -rf production
+          mkdir -p upload
+          tar -xf packaged/package.tar.gz -C upload
+
+      - name: Configure git
+        run: |
+          git config --global user.email "${{ env.DEPLOY_EMAIL_AUTH }}"
+          git config --global user.name "${{ env.DEPLOY_USER_AUTH }}"
+
+      - name: Initialize and push to client repo
+        env:
+            URL_REPOSITORY_DEPLOY: ${{ env.DEPLOY_URL_REPOSITORY }}
+        run: |
+          cd upload
+          git init
+          git remote add origin $URL_REPOSITORY_DEPLOY
+          git add .
+          VERSION_REPO_CLIENTE=$(cat ../version.txt)
+          EXISTE=$(git ls-remote --heads origin ${VERSION_REPO_CLIENTE} | awk '{print $1}')
+          echo $EXISTE
+          if [ "$EXISTE" ]; then
+            echo "Esta version ya existe, revisar versionamiento"
+            exit 1
+          fi
+          git commit -m "Solicitando Pase ${VERSION_REPO_CLIENTE}"
+          echo $VERSION_REPO_CLIENTE
+          git checkout -b $VERSION_REPO_CLIENTE
+          git push origin $VERSION_REPO_CLIENTE
