@@ -48,6 +48,13 @@ jobs:
       - name: Install chardet
         run: pip install chardet
 
+      - name: Auto-convert version.txt encoding if needed
+        run: |
+          if python -m chardet version.txt | grep -q 'UTF-8-SIG'; then
+            echo "Converting UTF-8-SIG to UTF-8 in version.txt"
+            awk 'NR==1{sub(/^\xef\xbb\xbf/,"")}{print}' version.txt > temp.txt && mv temp.txt version.txt
+          fi
+
       - name: Check version.txt encoding
         run: |
           ENCODING=$(python -m chardet version.txt | grep -o 'UTF-8')
