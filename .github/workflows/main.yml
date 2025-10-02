@@ -7,7 +7,6 @@ on:
       - faast/preProd
       - progreso/prePrdAws
       - total/prod
-	    - develop
   workflow_dispatch:
 
 jobs:
