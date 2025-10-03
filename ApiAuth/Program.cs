@@ -7,6 +7,7 @@ using ApiAuth.OptionsSetup;
 using ApiAuth.Persistence;
 using Carter;
 
+// mensaje de prueba
 var builder = WebApplication.CreateBuilder(args);
 
 var builderEnvironment = new ConfigurationBuilder()
