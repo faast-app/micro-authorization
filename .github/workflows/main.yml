@@ -13,7 +13,6 @@ on:
       - faast/stage
       - faast/preProd
       - develop
-  # workflow_dispatch:
 
 concurrency:
   group: ci-${{ github.ref }}
@@ -51,7 +50,6 @@ jobs:
   publish-client:
     runs-on: ubuntu-latest
     needs: [build-and-test]
-    # if: github.event_name == 'workflow_dispatch'
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
