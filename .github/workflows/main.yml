@@ -79,12 +79,12 @@ jobs:
         run: |
           cd upload
           git init
-          git remote add origin $URL_REPOSITORY_DEPLOY
+          git remote add origin "$URL_REPOSITORY_DEPLOY"
           git add .
           VERSION_REPO_CLIENTE=$(cat ../version.txt)
-          echo $VERSION_REPO_CLIENTE
-          EXISTE=$(git ls-remote --heads origin ${VERSION_REPO_CLIENTE} | awk '{print $1}')
-          echo $EXISTE
+          echo "VERSION_REPO_CLIENTE: $VERSION_REPO_CLIENTE"
+          EXISTE=$(git ls-remote --heads origin "$VERSION_REPO_CLIENTE" | awk '{print $1}')
+          echo "EXISTE: $EXISTE"
           if [ "$EXISTE" ]; then
             echo "Esta version ya existe, revisar versionamiento"
             exit 1
