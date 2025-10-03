@@ -6,12 +6,14 @@ on:
     - faast/desa
     - faast/stage
     - faast/preProd
+    - develop
   pull_request:
     branches: 
     - faast/desa
     - faast/stage
     - faast/preProd
-  # workflow_dispatch:
+    - develop
+  workflow_dispatch:
 
 concurrency:
   group: ci-${{ github.ref }}
