@@ -77,9 +77,23 @@ jobs:
             GH_TOKEN: ${{ secrets.GH_TOKEN }}
             DEPLOY_REPOSITORY_NAME: ${{ env.DEPLOY_REPOSITORY_NAME }}
         run: |
+          echo "Current directory: $(pwd)"
+          ls -l
+          
+          if [ ! -d upload ]; then
+            echo "upload directory not found"
+            exit 2
+          fi
+          
           cd upload
+          
+          if [ ! -f ../version.txt ]; then
+            echo "version.txt not found"
+            exit 2
+          fi
+          
           git init
-          echo "EXISTE: $URL_REPOSITORY_DEPLOY"
+          git remote add origin "$URL_REPOSITORY_DEPLOY"
           git add .
           VERSION_REPO_CLIENTE=$(cat ../version.txt)
           echo "VERSION_REPO_CLIENTE: $VERSION_REPO_CLIENTE"
