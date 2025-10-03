@@ -77,13 +77,8 @@ jobs:
             GH_TOKEN: ${{ secrets.GH_TOKEN }}
             DEPLOY_REPOSITORY_NAME: ${{ env.DEPLOY_REPOSITORY_NAME }}
         run: |
-          echo "Current directory: $(pwd)"
-          ls -l
-          
           cd upload
           git init
-          git config --global user.email "$EMAIL"
-          git config --global user.name "$NAME"
           echo "URL_REPOSITORY_DEPLOY: $URL_REPOSITORY_DEPLOY"
           git remote add deploy "$URL_REPOSITORY_DEPLOY"
           git ls-remote deploy || { echo "Remote authentication failed"; exit 128; }
