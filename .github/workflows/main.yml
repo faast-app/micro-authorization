@@ -2,12 +2,15 @@ name: Build, Test, and Publish
 
 on:
   push:
-    branches:
-      - faast/stage
-      - faast/preProd
-      - progreso/prePrdAws
-      - total/prod
+    branches: 
+    - faast/desa
+    - faast/stage
+    - faast/preProd
   workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build-and-test:
@@ -71,19 +74,23 @@ jobs:
       - name: Initialize and push to client repo
         env:
             URL_REPOSITORY_DEPLOY: ${{ env.DEPLOY_URL_REPOSITORY }}
+            GH_TOKEN: ${{ secrets.GH_TOKEN }}
+            DEPLOY_REPOSITORY_NAME: ${{ env.DEPLOY_REPOSITORY_NAME }}
         run: |
           cd upload
-          git init
-          git remote add origin $URL_REPOSITORY_DEPLOY
-          git add .
           VERSION_REPO_CLIENTE=$(cat ../version.txt)
+          echo $VERSION_REPO_CLIENTE
           EXISTE=$(git ls-remote --heads origin ${VERSION_REPO_CLIENTE} | awk '{print $1}')
           echo $EXISTE
           if [ "$EXISTE" ]; then
             echo "Esta version ya existe, revisar versionamiento"
             exit 1
           fi
+          REPO_URL_WITH_TOKEN="https://Guido.Matos:${{ secrets.GH_TOKEN }}@github.com/${{ env.DEPLOY_REPOSITORY_NAME }}"
+          echo $REPO_URL_WITH_TOKEN
+          git init
+          git remote set-url origin $REPO_URL_WITH_TOKEN
+          git add .
           git commit -m "Solicitando Pase ${VERSION_REPO_CLIENTE}"
-          echo $VERSION_REPO_CLIENTE
           git checkout -b $VERSION_REPO_CLIENTE
-          git push origin $VERSION_REPO_CLIENTE
+          git push $REPO_URL_WITH_TOKEN
