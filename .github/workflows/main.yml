@@ -6,7 +6,12 @@ on:
     - faast/desa
     - faast/stage
     - faast/preProd
-  workflow_dispatch:
+  pull_request:
+    branches: 
+    - faast/desa
+    - faast/stage
+    - faast/preProd
+  # workflow_dispatch:
 
 concurrency:
   group: ci-${{ github.ref }}
@@ -75,9 +80,9 @@ jobs:
 
       - name: Initialize and push to client repo
         env:
-            GH_USER: ${{ env.DEPLOY_GH_USER }}
+            GH_USER: ${{ secrets.DEPLOY_USER_AUTH }}
             GH_TOKEN: ${{ secrets.GH_TOKEN }}
-            REPOSITORY_NAME: ${{ env.DEPLOY_REPOSITORY_NAME }}
+            REPOSITORY_NAME: ${{ secrets.DEPLOY_REPOSITORY_NAME }}
         run: |
           cd upload
           git init
