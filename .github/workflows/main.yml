@@ -84,13 +84,12 @@ jobs:
           git init
           git config --global user.email "$EMAIL"
           git config --global user.name "$NAME"
-          git remote add origin "$URL_REPOSITORY_DEPLOY"
-          git remote -v
-          git ls-remote origin || { echo "Remote authentication failed"; exit 128; }
+          git remote add deploy "$URL_REPOSITORY_DEPLOY"
+          git ls-remote deploy || { echo "Remote authentication failed"; exit 128; }
           git add .
           VERSION_REPO_CLIENTE=$(cat ../version.txt)
           echo "VERSION_REPO_CLIENTE: $VERSION_REPO_CLIENTE"
-          EXISTE=$(git ls-remote --heads origin "$VERSION_REPO_CLIENTE" | awk '{print $1}')
+          EXISTE=$(git ls-remote --heads deploy "$VERSION_REPO_CLIENTE" | awk '{print $1}')
           echo "EXISTE: $EXISTE"
           if [ "$EXISTE" ]; then
             echo "Esta version ya existe, revisar versionamiento"
@@ -98,4 +97,4 @@ jobs:
           fi
           git commit --allow-empty -m "Solicitando Pase ${VERSION_REPO_CLIENTE}"
           git checkout -b "$VERSION_REPO_CLIENTE"
-          git push origin "$VERSION_REPO_CLIENTE"
+          git push deploy "$VERSION_REPO_CLIENTE"
