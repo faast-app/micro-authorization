@@ -80,20 +80,13 @@ jobs:
           echo "Current directory: $(pwd)"
           ls -l
           
-          if [ ! -d upload ]; then
-            echo "upload directory not found"
-            exit 2
-          fi
-          
           cd upload
-          
-          if [ ! -f ../version.txt ]; then
-            echo "version.txt not found"
-            exit 2
-          fi
-          
           git init
+          git config --global user.email "$EMAIL"
+          git config --global user.name "$NAME"
           git remote add origin "$URL_REPOSITORY_DEPLOY"
+          git remote -v
+          git ls-remote origin || { echo "Remote authentication failed"; exit 128; }
           git add .
           VERSION_REPO_CLIENTE=$(cat ../version.txt)
           echo "VERSION_REPO_CLIENTE: $VERSION_REPO_CLIENTE"
@@ -103,9 +96,6 @@ jobs:
             echo "Esta version ya existe, revisar versionamiento"
             exit 1
           fi
-          REPO_URL_WITH_TOKEN="https://Guido.Matos:$GH_TOKEN@github.com/faast-app/$DEPLOY_REPOSITORY_NAME"
-          echo "REPO_URL_WITH_TOKEN: $REPO_URL_WITH_TOKEN"
-          git remote set-url origin "$REPO_URL_WITH_TOKEN"
           git commit --allow-empty -m "Solicitando Pase ${VERSION_REPO_CLIENTE}"
           git checkout -b "$VERSION_REPO_CLIENTE"
           git push origin "$VERSION_REPO_CLIENTE"
