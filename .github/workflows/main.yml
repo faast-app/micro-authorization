@@ -3,16 +3,16 @@ name: Build, Test, and Publish
 on:
   push:
     branches: 
-    - faast/desa
-    - faast/stage
-    - faast/preProd
-    - develop
+      - faast/desa
+      - faast/stage
+      - faast/preProd
+      - develop
   pull_request:
     branches: 
-    - faast/desa
-    - faast/stage
-    - faast/preProd
-    - develop
+      - faast/desa
+      - faast/stage
+      - faast/preProd
+      - develop
   # workflow_dispatch:
 
 concurrency:

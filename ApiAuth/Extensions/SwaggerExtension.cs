@@ -16,7 +16,7 @@ public static class SwaggerExtension
             c.IncludeXmlComments(xmlPath);
             c.SwaggerDoc("v1", new OpenApiInfo
             {
-                Version = "v2.1.4",
+                Version = "v2.1.6",
                 Title = "API Auth",
                 Description = "REST API",
                 Contact = new OpenApiContact()
