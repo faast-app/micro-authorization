@@ -89,7 +89,7 @@ jobs:
             echo "Esta version ya existe, revisar versionamiento"
             exit 1
           fi
-          REPO_URL_WITH_TOKEN="https://Guido.Matos:${{ secrets.GH_TOKEN }}@github.com/${{ env.DEPLOY_REPOSITORY_NAME }}"
+          REPO_URL_WITH_TOKEN="https://Guido.Matos:${{ secrets.GH_TOKEN }}@github.com/faast-app/${{ env.DEPLOY_REPOSITORY_NAME }}"
           echo $REPO_URL_WITH_TOKEN
           git commit -m "Solicitando Pase ${VERSION_REPO_CLIENTE}"
           git checkout -b $VERSION_REPO_CLIENTE
