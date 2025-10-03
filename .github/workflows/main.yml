@@ -7,12 +7,6 @@ on:
       - faast/stage
       - faast/preProd
       - develop
-  pull_request:
-    branches: 
-      - faast/desa
-      - faast/stage
-      - faast/preProd
-      - develop
 
 concurrency:
   group: ci-${{ github.ref }}
