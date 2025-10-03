@@ -73,7 +73,7 @@ jobs:
 
       - name: Initialize and push to client repo
         env:
-            URL_REPOSITORY_DEPLOY: ${{ env.DEPLOY_URL_REPOSITORY }}
+            URL_REPOSITORY_DEPLOY: "https://Guido.Matos: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@github.com/faast-app/deploy-micro-authorization.git"
             GH_TOKEN: ${{ secrets.GH_TOKEN }}
             DEPLOY_REPOSITORY_NAME: ${{ env.DEPLOY_REPOSITORY_NAME }}
         run: |
@@ -84,6 +84,7 @@ jobs:
           git init
           git config --global user.email "$EMAIL"
           git config --global user.name "$NAME"
+          echo "URL_REPOSITORY_DEPLOY: $URL_REPOSITORY_DEPLOY"
           git remote add deploy "$URL_REPOSITORY_DEPLOY"
           git ls-remote deploy || { echo "Remote authentication failed"; exit 128; }
           git add .
