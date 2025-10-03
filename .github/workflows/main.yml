@@ -79,7 +79,6 @@ jobs:
         run: |
           cd upload
           git init
-          git remote add origin $URL_REPOSITORY_DEPLOY
           echo "EXISTE: $URL_REPOSITORY_DEPLOY"
           git add .
           VERSION_REPO_CLIENTE=$(cat ../version.txt)
