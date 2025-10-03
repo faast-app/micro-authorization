@@ -75,8 +75,6 @@ jobs:
 
       - name: Configure git
         run: |
-          echo "DEPLOY_EMAIL_AUTH: ${{ secrets.DEPLOY_EMAIL_AUTH }}"
-          echo "DEPLOY_USER_AUTH: ${{ secrets.DEPLOY_USER_AUTH }}"
           git config --global user.email "${{ secrets.DEPLOY_EMAIL_AUTH }}"
           git config --global user.name "${{ secrets.DEPLOY_USER_AUTH }}"
 
@@ -89,7 +87,6 @@ jobs:
           cd upload
           git init
           URL_REPOSITORY_DEPLOY="https://${GH_USER}:${GH_TOKEN}@github.com/faast-app/${REPOSITORY_NAME}.git"
-          echo "URL_REPOSITORY_DEPLOY: $URL_REPOSITORY_DEPLOY"
           git remote add deploy "$URL_REPOSITORY_DEPLOY"
           git ls-remote deploy || { echo "Remote authentication failed"; exit 128; }
           git add .
