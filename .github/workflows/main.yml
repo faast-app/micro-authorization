@@ -78,7 +78,7 @@ jobs:
         run: |
           cd upload
           git init
-          URL_REPOSITORY_DEPLOY="https://${GH_USER}:${GH_TOKEN}@github.com/faast-app/${REPOSITORY_NAME}.git"
+          URL_REPOSITORY_DEPLOY="git@github.com:faast-app/deploy-micro-authorization.git"
           git remote add deploy "$URL_REPOSITORY_DEPLOY"
           git ls-remote deploy || { echo "Remote authentication failed"; exit 128; }
           git add .
