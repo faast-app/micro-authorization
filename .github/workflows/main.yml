@@ -65,11 +65,6 @@ jobs:
           mkdir -p upload
           tar -xf packaged/package.tar.gz -C upload
 
-      - name: Configure git
-        run: |
-          git config --global user.email "${{ secrets.DEPLOY_EMAIL_AUTH }}"
-          git config --global user.name "${{ secrets.DEPLOY_USER_AUTH }}"
-
       - name: Initialize and push to client repo
         env:
             GH_USER: ${{ secrets.DEPLOY_USER_AUTH }}
@@ -78,12 +73,13 @@ jobs:
         run: |
           cd upload
           git init
-          URL_REPOSITORY_DEPLOY="git@github.com:faast-app/deploy-micro-authorization.git"
-          git remote add deploy "$URL_REPOSITORY_DEPLOY"
+          URL_REPOSITORY_DEPLOY="git@github.com:faast-app/${REPOSITORY_NAME}.git"
+          echo "URL REPOSITORY: ${URL_REPOSITORY_DEPLOY} "
+          git remote add deploy "${URL_REPOSITORY_DEPLOY}"
           git ls-remote deploy || { echo "Remote authentication failed"; exit 128; }
           git add .
           VERSION_REPO_CLIENTE=$(cat ../version.txt)
-          echo "VERSION_REPO_CLIENTE: $VERSION_REPO_CLIENTE"
+          echo "VERSION_REPO_CLIENTE: ${VERSION_REPO_CLIENTE}"
           git commit --allow-empty -m "Solicitando Pase ${VERSION_REPO_CLIENTE}"
-          git checkout -b "$VERSION_REPO_CLIENTE"
-          git push deploy "$VERSION_REPO_CLIENTE"
+          git checkout -b "${VERSION_REPO_CLIENTE}"
+          git push deploy "${VERSION_REPO_CLIENTE}"
